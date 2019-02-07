@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: nginx-114-socat-rhel7
+spec:
+  completionDeadlineSeconds: 300
+  source:
+    type: Dockerfile
+    dockerfile: |
+      FROM nginx-114-rhel7:latest
+      USER 0
+      RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release && \
+          INSTALL_PKGS="python27 python27-python-devel python27-python-setuptools python27-python-pip socat" && \
+          yum install \
+              --enablerepo=rhel-server-rhscl-7-rpms \
+              --setopt=tsflags=nodocs \
+              --assumeyes \
+              $INSTALL_PKGS && \
+          yum clean all && \
+          rm -rf /var/cache/yum && \
+          echo source scl_source enable python27 >>/opt/app-root/etc/scl_enable && \
+          $PROMPT_COMMAND && \
+          pip install \
+              --index-url=REPLACE_WITH_PYTHON_REPOSITORY \
+              --no-cache-dir \
+              supervisor
+      USER 1001
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: nginx-114-rhel7:latest
+        forcePull: true
+  output:
+    to:
+      kind: ImageStreamTag
+      name: nginx-114-socat-rhel7:latest
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChange: {}
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1000Mi

@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: artifactory-rproxy
+spec:
+  replicas: 2
+  strategy:
+    type: Rolling
+    rollingParams:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    name: artifactory-rproxy
+  template:
+    metadata:
+      labels:
+        name: artifactory-rproxy
+    spec:
+      containers:
+      - name: nginx
+        image: nginx-114-socat-rhel7:latest
+        imagePullPolicy: Always
+        command:
+        - sh
+        args:
+        - -c
+        - $$PROMPT_COMMAND && supervisord
+        env:
+        - name: TZ
+          value: Europe/Stockholm
+        ports:
+        - name: http-alt
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        volumeMounts:
+        - name: config
+          subPath: supervisord.conf
+          mountPath: /etc/supervisord.conf
+          readOnly: true
+        - name: config
+          subPath: index.html
+          mountPath: /opt/rh/rh-nginx114/root/usr/share/nginx/html/index.html
+          readOnly: true
+        - name: config
+          subPath: nginx.conf
+          mountPath: /etc/opt/rh/rh-nginx114/nginx/nginx.conf
+          readOnly: true
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+      volumes:
+      - name: config
+        configMap:
+          name: artifactory-rproxy
+  test: false
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames:
+      - nginx
+      from:
+        kind: ImageStreamTag
+        name: nginx-114-socat-rhel7:latest

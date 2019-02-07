@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  name: nginx-114-rhel7
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - name: latest
+    from:
+      kind: DockerImage
+      name: REPLACE_WITH_DOCKER_REPOSITORY/rhscl/nginx-114-rhel7:latest
+    importPolicy:
+      scheduled: true
+    referencePolicy:
+      type: Source
