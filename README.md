@@ -33,7 +33,7 @@
                |
     +----------v----------+
     |                     |
-    |  OpenShift HAProxy  |
+    |  OpenShift  Router  |
     |                     |
     +----------+----------+
                |
