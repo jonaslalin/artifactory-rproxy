@@ -33,7 +33,7 @@
                |
     +----------v----------+
     |                     |
-    |  OpenShift  Router  |
+    |  OpenShift Router   |
     |                     |
     +----------+----------+
                |
