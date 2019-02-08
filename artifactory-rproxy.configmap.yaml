@@ -10,7 +10,7 @@ data:
     nodaemon=true
 
     [program:fontawesome-https]
-    command=socat -d TCP4-LISTEN:9443,bind=127.0.0.1,reuseaddr,fork PROXY:REPLACE_WITH_CORPORATE_PROXY:npm.fontawesome.com:443
+    command=socat -d TCP4-LISTEN:9443,bind=127.0.0.1,reuseaddr,fork PROXY:REPLACE_WITH_CORPORATE_PROXY:npm.fontawesome.com:443,proxyport=8080
     priority=0
 
     [program:fontawesome-http]

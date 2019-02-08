@@ -1,4 +1,101 @@
-# artifactory-rproxy
+# JFrog Artifactory -> Font Awesome NPM Registry
+
+## Traffic Flow
+
+```
+
+             XXXXX
+             X   X
+             XXXXX
+               X
+           XXXXXXXXX
+               X
+              XXX
+             XX XX
+            XX   XX
+
+               +
+               |
+               |
+               |
+    HTTP:80    |  HTTPS:443
+               |
+    +----------v----------+
+    |                     |
+    |  JFrog Artifactory  |
+    |                     |
+    +----------+----------+
+               |
+               |
+               |
+               |
+    HTTP:80    |  HTTPS:443
+               |
+    +----------v----------+
+    |                     |
+    |  OpenShift HAProxy  |
+    |                     |
+    +----------+----------+
+               |
+               |
+               |
+               |
+   HTTP:8080   |
+               |
+   +-----------v-----------+
+   |                       |
+   |  NGINX Reverse Proxy  |
+   |                       |
+   +-----------+-----------+
+               |
+               |
+               |
+               |
+   HTTP:9080   |
+               |
+   +-----------v-----------+
+   |                       |
+   |  Socat Forward Proxy  |
+   |                       |
+   +-----------+-----------+
+               |
+               |
+               |
+               |
+               |  HTTPS:9443
+               |
+   +-----------v-----------+
+   |                       |
+   |  Socat Forward Proxy  |
+   |                       |
+   +-----------+-----------+
+               |
+               |
+               |
+               |
+               |    HTTPS:8080
+               |
+ +-------------v-------------+
+ |                           |
+ |  Corporate Forward Proxy  |
+ |                           |
+ +-------------+-------------+
+               |
+               |
+               |
+               |
+               |      HTTPS:443
+               |
++--------------v--------------+
+|                             |
+|  Font Awesome NPM Registry  |
+|                             |
++-----------------------------+
+
+```
+
+
+## OpenShift Deployment
 
 ```
 
