@@ -97,7 +97,7 @@
 
 ## OpenShift Deployment
 
-```
+```powershell
 
 (gc nginx-114-rhel7.imagestream.yaml).replace(
     "REPLACE_WITH_DOCKER_REPOSITORY", "your_docker_repository"
