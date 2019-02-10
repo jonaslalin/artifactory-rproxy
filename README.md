@@ -99,27 +99,31 @@
 
 ```powershell
 
-(Get-Content nginx-114-rhel7.imagestream.yaml).replace(
+(Get-Content nginx-114-rhel7.imagestream.yaml).Replace(
     "REPLACE_WITH_DOCKER_REPOSITORY", "your_docker_repository"
-) | oc create -f -
+) |
+oc create -f -
 
 oc create -f nginx-114-socat-rhel7.imagestream.yaml
 
-(Get-Content nginx-114-socat-rhel7.buildconfig.yaml).replace(
+(Get-Content nginx-114-socat-rhel7.buildconfig.yaml).Replace(
     "REPLACE_WITH_PYTHON_REPOSITORY", "your_python_repository"
-) | oc create -f -
+) |
+oc create -f -
 
-(Get-Content artifactory-rproxy.configmap.yaml).replace(
+(Get-Content artifactory-rproxy.configmap.yaml).Replace(
     "REPLACE_WITH_CORPORATE_PROXY", "your_corporate_proxy"
-).replace(
+).Replace(
     "REPLACE_WITH_FONTAWESOME_TOKEN", "your_secret_bearer_token"
-) | oc create -f -
+) |
+oc create -f -
 
 oc create -f artifactory-rproxy.deploymentconfig.yaml
 
-(Get-Content artifactory-rproxy.route.yaml).replace(
+(Get-Content artifactory-rproxy.route.yaml).Replace(
     "REPLACE_WITH_HOSTNAME", "your_preferred_hostname"
-) | oc create -f -
+) |
+oc create -f -
 
 oc create -f artifactory-rproxy.service.yaml
 
