@@ -37,9 +37,9 @@ spec:
       kind: ImageStreamTag
       name: nginx-114-socat-rhel7:latest
   triggers:
-  - type: ConfigChange
-  - type: ImageChange
-    imageChange: {}
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange: {}
   resources:
     limits:
       cpu: 1000m
