@@ -34,6 +34,8 @@ data:
         <p>Hello, Proxy!</p>
     </body>
     </html>
+  .htpasswd: |
+    artifactory:{PLAIN}REPLACE_WITH_BASICAUTH_PASSWORD
   nginx.conf: |
     error_log  /dev/stderr  warn;
     pid  /tmp/nginx.pid;
@@ -74,6 +76,9 @@ data:
             }
 
             location /fontawesome/ {
+                auth_basic  "Protected npm Registry";
+                auth_basic_user_file  .htpasswd;
+
                 proxy_http_version  1.1;
                 proxy_pass  http://127.0.0.1:9080/;
                 proxy_redirect  https://npm.fontawesome.com/  $http_x_forwarded_proto://$host/fontawesome/;

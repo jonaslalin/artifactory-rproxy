@@ -1,4 +1,4 @@
-# JFrog Artifactory -> Font Awesome NPM Registry
+# JFrog Artifactory -> Font Awesome npm Registry
 
 ## Traffic Flow
 
@@ -88,7 +88,7 @@
                |
 +--------------v--------------+
 |                             |
-|  Font Awesome NPM Registry  |
+|  Font Awesome npm Registry  |
 |                             |
 +-----------------------------+
 
@@ -112,6 +112,8 @@ oc create -f -
 
 (Get-Content artifactory-rproxy.configmap.yaml).Replace(
     "REPLACE_WITH_CORPORATE_PROXY", "your_corporate_proxy"
+).Replace(
+    "REPLACE_WITH_BASICAUTH_PASSWORD", "your_secret_plaintext_password"
 ).Replace(
     "REPLACE_WITH_FONTAWESOME_TOKEN", "your_secret_bearer_token"
 ) |

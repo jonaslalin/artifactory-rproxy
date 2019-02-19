@@ -49,6 +49,10 @@ spec:
               mountPath: /opt/rh/rh-nginx114/root/usr/share/nginx/html/index.html
               readOnly: true
             - name: config
+              subPath: .htpasswd
+              mountPath: /etc/opt/rh/rh-nginx114/nginx/.htpasswd
+              readOnly: true
+            - name: config
               subPath: nginx.conf
               mountPath: /etc/opt/rh/rh-nginx114/nginx/nginx.conf
               readOnly: true
