@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: artifactory-rproxy
+  namespace: REPLACE_WITH_NAMESPACE
 data:
   supervisord.conf: |
     [supervisord]
@@ -10,7 +11,7 @@ data:
     nodaemon=true
 
     [program:fontawesome-https]
-    command=socat -d TCP4-LISTEN:9443,bind=127.0.0.1,reuseaddr,fork PROXY:REPLACE_WITH_CORPORATE_PROXY:npm.fontawesome.com:443,proxyport=8080
+    command=socat -d TCP4-LISTEN:9443,bind=127.0.0.1,reuseaddr,fork PROXY:REPLACE_WITH_CORPORATE_FORWARD_PROXY_HOSTNAME:npm.fontawesome.com:443,proxyport=REPLACE_WITH_CORPORATE_FORWARD_PROXY_PORT
     priority=0
 
     [program:fontawesome-http]
@@ -31,11 +32,11 @@ data:
     </head>
     <body>
         <h1>artifactory-rproxy</h1>
-        <p>Hello, Proxy!</p>
+        <p>Hello, from Proxy!</p>
     </body>
     </html>
   .htpasswd: |
-    artifactory:{PLAIN}REPLACE_WITH_BASICAUTH_PASSWORD
+    artifactory:{PLAIN}REPLACE_WITH_BASIC_AUTH_PASSWORD
   nginx.conf: |
     error_log  /dev/stderr  warn;
     pid  /tmp/nginx.pid;
@@ -76,7 +77,7 @@ data:
             }
 
             location /fontawesome/ {
-                auth_basic  "Protected npm Registry";
+                auth_basic  "Font Awesome";
                 auth_basic_user_file  .htpasswd;
 
                 proxy_http_version  1.1;
@@ -92,7 +93,7 @@ data:
                 proxy_set_header  X-Forwarded-Proto  '';
 
                 proxy_set_header  Host  npm.fontawesome.com;
-                proxy_set_header  Authorization  'Bearer REPLACE_WITH_FONTAWESOME_TOKEN';
+                proxy_set_header  Authorization  'Bearer REPLACE_WITH_FONT_AWESOME_BEARER_TOKEN';
 
                 sub_filter_types  application/vnd.npm.install-v1+json  application/json;
                 sub_filter  '"tarball":"https://npm.fontawesome.com/'  '"tarball":"$http_x_forwarded_proto://$host/fontawesome/';
